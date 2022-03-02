@@ -1,0 +1,27 @@
+Main : ***
+Welcome to kotlin-basics
+***
+
+
+To run the documentation , run :
+    ./gradle run
+or
+    ./gradle run --args='--help'
+
+***
+
+To run the deserialization , run
+ ./gradle run --args='-j'
+or
+ ./gradle run --args='-json'
+
+***
+
+To run the hashing , run
+  ./gradle run --args='-j {{message}}'
+ or
+   ./gradle run --args='-json {{message}}'
+
+Replace the {{message}} by the value you want to hash
+
+***

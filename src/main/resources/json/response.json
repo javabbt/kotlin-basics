@@ -1,0 +1,47 @@
+{
+  "code": 200,
+  "status": "Ok",
+  "copyright": "© 2021 MARVEL",
+  "attributionText": "Data provided by Marvel. © 2021 MARVEL",
+  "attributionHTML": "<a href=\"http://marvel.com\">Data provided by Marvel. © 2021 MARVEL</a>",
+  "etag": "eee1dbbfbf423bd1a92b87c5b484aa2de4f00bfd",
+  "data": {
+    "offset": 0,
+    "limit": 20,
+    "total": 1,
+    "count": 1,
+    "results": [
+      {
+        "id": 1009368,
+        "name": "Iron Man",
+        "description": "Wounded, captured and forced to build a weapon by his enemies, billionaire industrialist Tony Stark instead created an advanced suit of armor to save his life and escape captivity. Now with a new outlook on life, Tony uses his money and intelligence to make the world a safer, better place as Iron Man.",
+        "modified": "2016-09-28T12:08:19-0400",
+        "thumbnail": {
+          "path": "http://i.annihil.us/u/prod/marvel/i/mg/9/c0/527bb7b37ff55",
+          "extension": "jpg"
+        },
+        "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009368",
+        "comics": {
+          "available": 2584,
+          "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009368/comics",
+          "returned": 20
+        },
+        "series": {
+          "available": 633,
+          "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009368/series",
+          "returned": 20
+        },
+        "stories": {
+          "available": 3911,
+          "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009368/stories",
+          "returned": 20
+        },
+        "events": {
+          "available": 31,
+          "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009368/events",
+          "returned": 20
+        }
+      }
+    ]
+  }
+}

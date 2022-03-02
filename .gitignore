@@ -1,0 +1,9 @@
+# Gradle
+/build/
+/.gradle/
+# IntelliJ
+/.idea/
+/.idea/*.xml
+/.idea/.gitignore
+# Sensitive informations
+/marvel_api_key.properties
