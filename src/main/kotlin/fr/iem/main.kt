@@ -40,6 +40,7 @@ fun deserializeJson() {
 
 }
 
+/** function for reading the documentation file**/
 fun readDoc() {
     val inputStream: InputStream = File("/home/yannick/kotlin-basics/src/main/resources/documentation.txt").inputStream()
     val lineList = mutableListOf<String>()
