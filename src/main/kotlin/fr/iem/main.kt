@@ -12,6 +12,7 @@ import fr.iem.Constants.secondJson
 import java.io.File
 import java.io.InputStream
 import java.io.InputStreamReader
+import java.security.MessageDigest
 
 /** Entry point of the application */
 fun main(args: Array<String>) {
@@ -27,15 +28,19 @@ fun main(args: Array<String>) {
                 readDoc()
             }
             jsonArgs[0], jsonArgs[1] -> {
-                deserializeJson(firstJson , 1)
-                deserializeJson(secondJson , 2)
+                deserializeJson(firstJson, 1)
+                deserializeJson(secondJson, 2)
             }
         }
-    } else if (args.size == 2) {
+    } else {
         if (args[0] == hashArgs[0] || args[0] == hashArgs[1]) {
-
+            val sb = StringBuilder()
+            for (i in 1 until args.size)
+                sb.append(args[i] + " ").trim()
+            val encryptedString = sb.toString().encrypt()
+            println("Encrypted string $encryptedString")
         } else displayInvalidArgument()
-    } else displayInvalidArgument()
+    }
 }
 
 fun displayInvalidArgument() {
@@ -51,7 +56,7 @@ object Constants {
     const val secondJson = "/home/yannick/kotlin-basics/src/main/resources/json/response.json"
 }
 
-fun  deserializeJson(path: String, response: Int) {
+fun deserializeJson(path: String, response: Int) {
     println("***************************************************************")
     println()
     var inputStream: InputStream? = null
@@ -66,7 +71,7 @@ fun  deserializeJson(path: String, response: Int) {
                 val stringResponse = gson.fromJson(jsonReader, IronManItem::class.java) as IronManItem
                 println(stringResponse)
             }
-            2 ->{
+            2 -> {
                 val stringResponse = gson.fromJson(jsonReader, Response::class.java) as Response
                 println(stringResponse)
             }
@@ -97,3 +102,11 @@ fun readDoc() {
         inputStream?.close()
     }
 }
+
+fun String.encrypt(): String {
+    val digest = MessageDigest.getInstance("MD5")
+    val result = digest.digest(this.toByteArray(Charsets.UTF_8))
+    return result.toHex()
+}
+
+fun ByteArray.toHex() = joinToString(separator = "") { byte -> "%02x".format(byte) }
