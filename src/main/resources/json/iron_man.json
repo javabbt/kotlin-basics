@@ -10,11 +10,11 @@
   "resourceURI": "http://gateway.marvel.com/v1/public/characters/1009368",
   "comics": {
     "available": 2584,
-    "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009368/comics",
+    "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009368/comics"
   },
   "series": {
     "available": 633,
-    "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009368/series",
+    "collectionURI": "http://gateway.marvel.com/v1/public/characters/1009368/series"
   },
   "stories": {
     "available": 3911,
