@@ -4,6 +4,7 @@ import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
 import fr.data.ironman.IronManItem
 import fr.data.ironman.response.Response
+import fr.iem.Constants.docPath
 import fr.iem.Constants.firstJson
 import fr.iem.Constants.hashArgs
 import fr.iem.Constants.helpArgs
@@ -17,7 +18,7 @@ import java.security.MessageDigest
 /** Entry point of the application */
 fun main(args: Array<String>) {
     if (args.isEmpty())
-        readDoc()
+        readDoc(docPath)
     else if (args.size == 1) {
         /**
          * this part should normally be done with Coroutines
@@ -25,7 +26,7 @@ fun main(args: Array<String>) {
          **/
         when (args[0]) {
             helpArgs -> {
-                readDoc()
+                readDoc(docPath)
             }
             jsonArgs[0], jsonArgs[1] -> {
                 deserializeJson(firstJson, 1)
@@ -45,15 +46,16 @@ fun main(args: Array<String>) {
 
 fun displayInvalidArgument() {
     println("You entered invalid arguments")
-    readDoc()
+    readDoc(docPath)
 }
 
 object Constants {
     const val helpArgs = "--help"
     val jsonArgs = arrayOf("--j", "--json")
     val hashArgs = arrayOf("--md5", "--h")
-    const val firstJson = "/home/yannick/kotlin-basics/src/main/resources/json/iron_man.json"
-    const val secondJson = "/home/yannick/kotlin-basics/src/main/resources/json/response.json"
+    const val firstJson = "/kotlin-basics/src/main/resources/json/iron_man.json"
+    const val secondJson = "/kotlin-basics/src/main/resources/json/response.json"
+    const val docPath = "/kotlin-basics/src/main/resources/documentation.txt"
 }
 
 fun deserializeJson(path: String, response: Int) {
@@ -88,11 +90,11 @@ fun deserializeJson(path: String, response: Int) {
 }
 
 /** function for reading the documentation file**/
-fun readDoc() {
+fun readDoc(docPath: String) {
     var inputStream: InputStream? = null
     try {
         inputStream =
-            File("/home/yannick/kotlin-basics/src/main/resources/documentation.txt").inputStream()
+            File(docPath).inputStream()
         val lineList = mutableListOf<String>()
         inputStream.bufferedReader().forEachLine { lineList.add(it) }
         lineList.forEach { println(it) }
