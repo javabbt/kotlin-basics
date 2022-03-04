@@ -2,15 +2,21 @@ package fr.iem
 
 import com.google.gson.Gson
 import com.google.gson.stream.JsonReader
+import fr.api.RickApi
 import fr.data.ironman.IronManItem
 import fr.data.ironman.response.Response
+import fr.iem.Constants.BASE_URL
+import fr.iem.Constants.apiArgs
 import fr.iem.Constants.docPath
 import fr.iem.Constants.firstJson
 import fr.iem.Constants.hashArgs
 import fr.iem.Constants.helpArgs
 import fr.iem.Constants.jsonArgs
 import fr.iem.Constants.secondJson
+import fr.usecases.ReadDocUseCase
 import kotlinx.coroutines.*
+import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
@@ -22,18 +28,23 @@ import java.security.MessageDigest
 /** Entry point of the application */
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
-        runBlocking { readDoc(docPath) }
+        runBlocking { ReadDocUseCase(docPath).execute() }
     } else if (args.size == 1) {
         when (args[0]) {
             helpArgs -> {
                 runBlocking {
-                    readDoc(docPath)
+                    ReadDocUseCase(docPath).execute()
                 }
             }
             jsonArgs[0], jsonArgs[1] -> {
                 runBlocking {
                     deserialize(firstJson, null, IronManItem::class.java)
                     deserialize(secondJson, null, Response::class.java)
+                }
+            }
+            apiArgs -> {
+                runBlocking {
+                    makeApiRequest()
                 }
             }
         }
@@ -50,16 +61,18 @@ fun main(args: Array<String>) {
 
 fun displayInvalidArgument() {
     println("You entered invalid arguments")
-    runBlocking { readDoc(docPath) }
+    runBlocking { ReadDocUseCase(docPath).execute() }
 }
 
 object Constants {
     const val helpArgs = "--help"
     val jsonArgs = arrayOf("--j", "--json")
     val hashArgs = arrayOf("--md5", "--h")
+    const val apiArgs = "--api"
     const val firstJson = "src/main/resources/json/iron_man.json"
     const val secondJson = "src/main/resources/json/response.json"
     const val docPath = "src/main/resources/documentation.txt"
+    const val BASE_URL = "https://rickandmortyapi.com/api/character/"
 }
 
 suspend fun <T> deserialize(path: String?, json: String?, toClass: Class<T>) {
@@ -98,26 +111,26 @@ suspend fun <T> deserializeJson(path: String?, json: String?, toClass: Class<T>)
         returnData
     }
 
-/**
- *function for reading the documentation file.
- **/
-suspend fun readDoc(docPath: String) {
-    coroutineScope {
-        launch(Dispatchers.IO) {
-            var inputStream: InputStream? = null
-            try {
-                inputStream =
-                    File(docPath).inputStream()
-                val lineList = mutableListOf<String>()
-                inputStream.bufferedReader().forEachLine { lineList.add(it) }
-                lineList.forEach { println(it) }
-            } catch (e: Exception) {
-                println("Something went wrong >> ${e.message}")
-            } finally {
-                inputStream?.close()
-            }
-        }
-    }
+
+
+suspend fun makeApiRequest(){
+    val logging = HttpLoggingInterceptor()
+    logging.setLevel(HttpLoggingInterceptor.Level.BODY)
+
+    val client = OkHttpClient.Builder()
+        .addInterceptor(logging)
+        .build()
+
+    val retrofit  = Retrofit.Builder()
+        .baseUrl(BASE_URL)
+        .addConverterFactory(GsonConverterFactory.create())
+        .client(client)
+        .build()
+
+    val service: RickApi = retrofit.create(RickApi::class.java)
+    //Retrofit already handle coroutine calls by default
+    val character = service.getCharacter(1)
+    println(character)
 }
 
 
