@@ -9,7 +9,6 @@ class ReadDocUseCase(private val docPath: String) : UseCase<String> {
 
     override suspend fun execute(): Result<String> {
         val str = readDoc(docPath)
-        println(str)
         return Result.success(str)
     }
 

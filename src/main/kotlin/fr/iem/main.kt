@@ -28,12 +28,16 @@ import java.security.MessageDigest
 /** Entry point of the application */
 fun main(args: Array<String>) {
     if (args.isEmpty()) {
-        runBlocking { ReadDocUseCase(docPath).execute() }
+        runBlocking {
+            val result = ReadDocUseCase(docPath).execute()
+            if (result.isSuccess) println(result.getOrNull() ?: "Something went wrong")
+        }
     } else if (args.size == 1) {
         when (args[0]) {
             helpArgs -> {
                 runBlocking {
-                    ReadDocUseCase(docPath).execute()
+                    val result = ReadDocUseCase(docPath).execute()
+                    if (result.isSuccess) println(result.getOrNull() ?: "Something went wrong")
                 }
             }
             jsonArgs[0], jsonArgs[1] -> {
@@ -61,7 +65,10 @@ fun main(args: Array<String>) {
 
 fun displayInvalidArgument() {
     println("You entered invalid arguments")
-    runBlocking { ReadDocUseCase(docPath).execute() }
+    runBlocking {
+        val result = ReadDocUseCase(docPath).execute()
+        if (result.isSuccess) println(result.getOrNull() ?: "Something went wrong")
+    }
 }
 
 object Constants {
@@ -78,7 +85,7 @@ object Constants {
 suspend fun <T> deserialize(path: String?, json: String?, toClass: Class<T>) {
     println("***************************************************************")
     println()
-    val returnData = deserializeJson(path , json , toClass)
+    val returnData = deserializeJson(path, json, toClass)
     println(returnData)
     println()
     println("***************************************************************")
@@ -112,8 +119,7 @@ suspend fun <T> deserializeJson(path: String?, json: String?, toClass: Class<T>)
     }
 
 
-
-suspend fun makeApiRequest(){
+suspend fun makeApiRequest() {
     val logging = HttpLoggingInterceptor()
     logging.setLevel(HttpLoggingInterceptor.Level.BODY)
 
@@ -121,7 +127,7 @@ suspend fun makeApiRequest(){
         .addInterceptor(logging)
         .build()
 
-    val retrofit  = Retrofit.Builder()
+    val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
         .addConverterFactory(GsonConverterFactory.create())
         .client(client)
@@ -132,7 +138,6 @@ suspend fun makeApiRequest(){
     val character = service.getCharacter(1)
     println(character)
 }
-
 
 
 fun String.encrypt(): String {
